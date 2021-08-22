@@ -48,18 +48,7 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
     if not "id" in ho.keys():
         return
     cid = int(n.copy(ho[("id")]))  # ionosonde id
-
-    # Delete old directory if exists
-    # if f == 1 and os.path.exists(out_dir):
-    #    shutil.rmtree(out_dir)
-
-    #	strftime('%Y-%m-%d')+str('-loc'), cid, int(t00[0:4]), int(t00[5:7]), int(t00[8:10]), int(t00[11:13]), int(t00[14:16]), int(t00[17:19]))
-
-    # if os.path.exists(img_fname):
-    # print("Ionogram plot %s already exists. Skipping"%(img_fname))
-    #    ho.close()
-    #    return
-    
+   
     out_dir1 = os.path.join(output_dir1, cd.unix2dirname(t0))
        # Create new output directory
     if not os.path.exists(out_dir1):
@@ -98,13 +87,11 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
     unarg1 = unravel_index(n.nanargmax(dB),dB.shape)
     
     # Assume that t0 is at the start of a standard unix second therefore, the propagation time is anything added to a full second
-    # if Rate == 100:
+
     dt = (t0-n.floor(t0))
     dr = dt*c.c/1e3    
     range_gates = dr+2*ranges/1e3
     r0 = range_gates[max_range_idx]
-    SSin = k_largest_index_argsort(S, k=10)
-    SSrn = n.sort(range_gates[SSin[:, 1]])
     
     DataDict["range_gates"] = range_gates
     
@@ -119,7 +106,9 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
     pos = n.argwhere(dB1a > 0)
     rg_2 = range_gates[pos]
     ast = n.std(dB2)
-    #ipdb.set_trace()
+    if len(dB2) == 0:
+        print('No useful data')     
+        sys.exit()
     am = n.max(dB2)
     apos = n.argwhere(dB2 > (am -3*ast))
     rg_3 = rg_2[apos]
@@ -137,7 +126,6 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
         print('yes')
         range_gates2 = range_gates
         DataDict['range_gates2'] = range_gates
-        #T0all.append(t0)
     
         ch1 += 1
         if ch1 == 1:
@@ -166,19 +154,14 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
         print('ch1_inside=%d' %(ch1))
 
 def save_var(DataDict):
-    #global ch1, dB3, dB3a, dB3b, dB3c, T03, T01, range_gates, range_gates2, range_gates3, freqs
 
     #path1 = rootdir + '/' + dirs1 + '/' + dirs1[5:10] + 'c.data'
     path1 = output_dir1 + '/' + dirs1 + '/' + dirs1[5:10] + 'k.data'
-    #path1 = output_dir1 + '/' + cd.unix2dirname(T03[0])[5:10] + '.data'
 
     print(path1)
-    #ipdb.set_trace()
     with open(path1, 'wb') as f:
         pickle.dump(DataDict, f)
 
-    # with open('/home/dev/Downloads/chirp_juha2b/Time_2.data', 'rb') as f:
-    #    T03, dB3, range_gates =  pickle.load(f)
 
 
 if __name__ == "__main__":
@@ -201,10 +184,10 @@ if __name__ == "__main__":
             
             dtt1 = datetime.datetime.strptime('2021-05-31','%Y-%m-%d').date()
             dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
-            #ipdb.set_trace()
-            #if dtt2 > dtt1 :
+
+            if dtt2 > dtt1 :
             #if dirs1[0:10] == '2021-05-02':
-            if dirs1[0:4] == '2021':
+            #if dirs1[0:4] == '2021':
                 path = os.path.join(rootdir, dirs1)
                 print(dirs1)
                 os.chdir(path)
@@ -225,7 +208,7 @@ if __name__ == "__main__":
                         #print('ch1=%d' %(ch1))
                         plot_ionogram(conf, f, DataDict)
                     
-                    #ipdb.set_trace() 
+
                     if DataDict['ch1'] > 1:
                         save_var(DataDict)
                 

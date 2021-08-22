@@ -203,16 +203,16 @@ def save_var(DataDict):
             T03a = T03a[0:120]
     
     # Construct full dB3 and ranges_gatesnew with NaNs
-    dB3test = n.full([3999, 120], None)
+    dB3test = n.full([range_gates3.shape[0], 120], None)
     dB3test[:] = n.NaN
 
     DataDict['DBallnew'] = {}
     for k in [j for j in DataDict['DBall'].keys()]:
-        DataDict['DBallnew'][k] = n.full([3999, 120], None)
+        DataDict['DBallnew'][k] = n.full([range_gates3.shape[0], 120], None)
 
-    range_gatestest = n.full([3999, 120], None)
+    range_gatestest = n.full([range_gates3.shape[0], 120], None)
     range_gatestest[:] = n.NaN
-    range_gatesnew = n.full([3999, 120], None)
+    range_gatesnew = n.full([range_gates3.shape[0], 120], None)
     
     CT = 0
     CT1 = 0
@@ -251,7 +251,6 @@ def save_var(DataDict):
     file.write("%s = %s\n" %("x3_new", str(x3new)))
     file.close()
     
-    #fig = plt.figure(figsize=(1.5*10, 1.5*3))
     fig = plt.figure(figsize=(1.5*6, 1.5*12))
   
     fig.suptitle("RTI Plots : %s UTC" % datetime.datetime.utcfromtimestamp(T03[1]).strftime('%Y-%m-%d'),weight='bold',fontsize=14)
@@ -262,38 +261,26 @@ def save_var(DataDict):
 
 
     for j, k in enumerate(reversed([j for j in DataDict['DBall'].keys()])):
-        #ax1 = fig.add_subplot(4, 1, k.astype(n.int64)-2)
         ax1 = fig.add_subplot(6, 1, j+1)
         for ja in range(0, 118):
             plt.pcolormesh(new_times[ja:ja+2], n.column_stack((range_gatesnew[:, ja], range_gatesnew[:, ja])),DataDict['DBallnew'][k].astype(n.float)[:-1, ja:ja+1], vmin=-3, vmax=30.0,cmap="inferno")
         
         cb = plt.colorbar()
         cb.set_label("SNR (dB)")
-        #plt.title("RTI plot for %1.2f MHz" %(k))
-        #plt.title("RTI plot for %1.2f MHz" %(freqs[freqlist[k.astype(n.int64)]]/1e6))
-        #plt.xlabel("Time (UTC)")
-        #plt.ylabel("One-way range offset (km)")
         plt.ylabel("%1.2f MHz\n Range (km)" %(k), weight='bold',fontsize=12)
         plt.ylim([0, 4000])
         plt.xlim(new_times[0], new_times[-1])
         plt.tight_layout(rect=[0, 0.07, 1, 0.99],pad=1.0)
-        #plt.tight_layout(rect=[0.1, 0.4, 0.85, 0.99],pad=1.0)
         #plt.tight_layout(rect=[0, 0.03, 1, 0.95])
         #[left, bottom, right, top] in normalized (0, 1) figure coordinates
-        #plt.tight_layout(pad=1.0)
-        #plt.savefig(img_fname1, bbox_inches='tight')
-        #plt.savefig(img_fname2, bbox_inches='tight')
+  
 
-    #cb = plt.colorbar()
     plt.xlabel("Time (UTC)", weight='bold', fontsize=12)
     plt.savefig(img_fname1, bbox_inches='tight')
     plt.savefig(img_fname2, bbox_inches='tight')
-    #plt.show()
-    # plt.savefig(img_fname1)
-    #ipdb.set_trace()
     plt.close()
     plt.clf()
-    # ho.close()
+
 
 if __name__ == "__main__":
     if len(sys.argv) == 2:
