@@ -180,13 +180,13 @@ def save_var(DataDict):
             nn1 = n.where(NN == NN.min())[0][0]
             NNJ.append(nn1)
             if j == 0:
-            # Going upto nn1 requires it to write [0:(nn1+1)] as the last element is not taken in Python. So, this portion is unchanged.
+                # Going upto nn1 requires it to write [0:(nn1+1)] as the last element is not taken in Python. So, this portion is unchanged.
                 T03a1 = T03a[0:(nn1+1)]
                 TT3.append(T03a1)
             if j > 0:  
-            # For more than one schedule change. We begin where we had left. That is one element ahead of the last element of 'previous TT3' and add the change to all elements 
-            # for this batch. The length of the batch will be determined by len(T03aa1) : which is [NNJ[j-1] + 1]th position  upto new nn1 
-            # And repeat the process. 
+                # For more than one schedule change. We begin where we had left. That is one element ahead of the last element of 'previous TT3' and add the change to all elements 
+                # for this batch. The length of the batch will be determined by len(T03aa1) : which is [NNJ[j-1] + 1]th position  upto new nn1 
+                # And repeat the process. 
                 T03aa1 = T03a[NNJ[j-1]+1:(nn1+1)] + x4[x5[j-1]-1]
                 Element = TT3[j-1][-1]+720 + x4[x5[j-1]-1]
                 T03a1 = n.arange(Element, Element + 720*(len(T03aa1)-1)+20, 720)
