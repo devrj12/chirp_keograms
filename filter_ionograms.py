@@ -12,8 +12,6 @@ import datetime
 import shutil
 import time
 import sys
-import chirp_det as cd
-import chirp_config as cc
 import scipy.constants as c
 import h5py
 import numpy as n
@@ -26,13 +24,19 @@ import pandas as pd
 import ipdb
 
 
-#rootdir = '/home/dev/Downloads/chirp_juha2b'
-rootdir = '/media/dev/Seagate Backup Plus Drive/lfm_files'
+# Folder which has lfm files. 
+rootdir = '/media/dev/Seagate Backup Plus Drive'
 
-# for subdir, dirs, files in os.walk(rootdir):
+# All folders (within the rootdir) named by days of the calendar which has the lfm_files
 dirs = sorted(os.listdir(rootdir))
 
+# Remove first three undated folders. So, dirs has only dated folders which contain lfm files. The rootdir will vary by where the data is stored. And, dirs may need to be tweaked to ensure 
+# it is taking only into the 'dated-folders'.  
+dirs = dirs[3:-1]
+
+# folder where I want to save my data
 output_dir1 = "/home/dev/Downloads/chirp_juha2b/Plots20"
+
 freqlist = [60, 80, 100, 120, 140, 160] 
 
 
@@ -41,7 +45,7 @@ def k_largest_index_argsort(S, k):
     return n.column_stack(n.unravel_index(idx, S.shape))
 
 
-def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
+def filter_ionograms(f, Datadict, normalize_by_frequency=True):
     ho = h5py.File(f, "r")
     t0 = float(n.copy(ho[("t0")]))
     
@@ -49,8 +53,9 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
         return
     cid = int(n.copy(ho[("id")]))  # ionosonde id
    
-    out_dir1 = os.path.join(output_dir1, cd.unix2dirname(t0))
-       # Create new output directory
+    out_dir1 = os.path.join(output_dir1, dirs1)
+
+    # Create new output directory
     if not os.path.exists(out_dir1):
         os.makedirs(out_dir1)
 
@@ -72,18 +77,15 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
                                    
         S[S <= 0.0] = 1e-3
 
-    # Three tips - chirp-rate / range / use list to append
     max_range_idx = n.argmax(n.max(S, axis=0))
     # axis 0 is the direction along the rows
         
-    from numpy import unravel_index
     unarg = unravel_index(S.argmax(),S.shape)
     
     dB = n.transpose(10.0*n.log10(S))
     if normalize_by_frequency == False:
         dB = dB-n.nanmedian(dB)
     
-    #unarg1 = unravel_index(dB.argmax(),dB.shape)
     unarg1 = unravel_index(n.nanargmax(dB),dB.shape)
     
     # Assume that t0 is at the start of a standard unix second therefore, the propagation time is anything added to a full second
@@ -155,39 +157,31 @@ def plot_ionogram(conf, f, Datadict, normalize_by_frequency=True):
 
 def save_var(DataDict):
 
-    #path1 = rootdir + '/' + dirs1 + '/' + dirs1[5:10] + 'c.data'
     path1 = output_dir1 + '/' + dirs1 + '/' + dirs1[5:10] + 'k.data'
-
     print(path1)
+    ipdb.set_trace()
     with open(path1, 'wb') as f:
         pickle.dump(DataDict, f)
 
 
-
 if __name__ == "__main__":
-    if len(sys.argv) == 2:
-        conf = cc.chirp_config(sys.argv[1])
-    else:
-        conf = cc.chirp_config()
 
-    if conf.realtime:
-        while True:
-            fl = glob.glob("%s/*/lfm*.h5" % (conf.output_dir))
-            fl.sort()
-            for f in fl:
-                plot_ionogram(conf, f,DataDict)
-            time.sleep(10)
-            save_var()
-    else:
         for j in range(0, len(dirs)):
             dirs1 = dirs[j]
             
             dtt1 = datetime.datetime.strptime('2021-05-31','%Y-%m-%d').date()
             dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
 
+            # Looking to process data after certain date:
             if dtt2 > dtt1 :
-            #if dirs1[0:10] == '2021-05-02':
-            #if dirs1[0:4] == '2021':
+            
+            # Looking to process data for a certain day:
+            # if dirs1[0:10] == '2021-05-02':
+            
+            # Looking to process daata for all days for the year of choice : [e.g.: 2021]
+            # if dirs1[0:4] == '2021':
+                
+                # path goes into each-day-folder within the rootdir 
                 path = os.path.join(rootdir, dirs1)
                 print(dirs1)
                 os.chdir(path)
@@ -198,17 +192,13 @@ if __name__ == "__main__":
                 DataDict = {}
                 DataDict = {'freqlist': freqlist}
                 DataDict['ch1'] = ch1
-
-                # fl = glob.glob("%s/*/lfm*.h5" % (conf.output_dir))
-                # fl = glob.glob("%s/lfm*.h5" % (conf.output_dir))
-                
+               
                 if len(fl) > 1:
                     for jf, f in enumerate(fl):
                         print('jf=%d' %(jf))
                         #print('ch1=%d' %(ch1))
-                        plot_ionogram(conf, f, DataDict)
+                        filter_ionograms(f, DataDict)
                     
-
                     if DataDict['ch1'] > 1:
                         save_var(DataDict)
                 
