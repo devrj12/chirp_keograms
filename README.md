@@ -6,7 +6,7 @@ The algorithms in this repository can be used to make Range-Time-Intensity plots
 
 2. plot_ionograms.py : It reads the data saved by filter_ionograms.py to make the stacked subplots of the RTI images (keograms). 
 
-For both of the python codes, there are folders named to read/save data from/to. These folder names need to be changed as according to the names of the folders to be used by other users of these python codes.
+For both of the python codes, there are folders named to read/save data from/to. These folder names need to be changed as according to the names of the folders to be used by other users of these python codes. There are comments in the codes to help through the process. 
 
 Example RTI Plot:
 
