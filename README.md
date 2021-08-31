@@ -8,4 +8,6 @@ The algorithms in this repository can be used to make Range-Time-Intensity plots
 
 For both of the python codes, there are folders named to read/save data from/to. These folder names need to be changed as according to the names of the folders to be used by other users of these python codes.
 
-Example RTI Plot:![RTI-2021-02-18k](https://user-images.githubusercontent.com/15792043/131446616-0458d7ac-6893-4502-a50c-f5c1ad10feda.png)
+Example RTI Plot:
+
+![RTI-2021-02-18k](https://user-images.githubusercontent.com/15792043/131446616-0458d7ac-6893-4502-a50c-f5c1ad10feda.png)
