@@ -13,7 +13,7 @@
 #3 (b.) Keep only those schedules which occur at least 3 times continuously throughout the day.
 #4 (a). If T03a doesn't span the whole day, build it.
 #  (b). Then apply the corrections for schedule changes  -- if they still exist which they can --  in batches.
-#6. Fill the missing data with NaN in the intensity (dB3) and the range (range_gates3).
+#5. Fill the missing data with NaN in the intensity (dB3) and the range (range_gates3).
            # Steps for 6 : 
     		#a. Get the regular time-series  - A (T03a).
     		#b. Get the available time-series  - B (T03). Note len(A) > len(B)
@@ -21,7 +21,7 @@
     		#d. If it exists, keep the corresponding 'stripe' of dB3.
     		#e. If it doesn't exist, insert a NaN stripe in new dB3.
   
-#7. Make plots.  For RTI map, use for loop for pcolormesh.
+#6. Make plots.  For RTI map, use for loop for pcolormesh.
 
 
 import numpy as n
