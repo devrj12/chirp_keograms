@@ -132,7 +132,8 @@ def save_var(DataDict):
     
     if len(x3n) == 0: 
         print('No useful data')     
-        sys.exit()
+        #sys.exit()
+        return
 
     x3n = n.concatenate(x3n,axis=None).astype(int)    
     x3in = n.array(range(0,len(x3)))

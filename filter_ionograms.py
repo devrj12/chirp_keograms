@@ -110,7 +110,8 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
     ast = n.std(dB2)
     if len(dB2) == 0:
         print('No useful data')     
-        sys.exit()
+        return
+        #sys.exit()
     am = n.max(dB2)
     apos = n.argwhere(dB2 > (am -3*ast))
     rg_3 = rg_2[apos]
