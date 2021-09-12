@@ -26,14 +26,14 @@ import ipdb
 
 
 # Folder which has lfm files. 
-rootdir = '/media/dev/Seagate Backup Plus Drive'
+rootdir = '/media/dev/Seagate Backup Plus Drive/chirp'
 
 # All folders (within the rootdir) named by days of the calendar which has the lfm_files
 dirs = sorted(os.listdir(rootdir))
 
 # Remove first three undated folders. So, dirs has only dated folders which contain lfm files. The rootdir will vary by where the data is stored. And, dirs may need to be tweaked to ensure 
 # it is taking only into the 'dated-folders'.  
-dirs = dirs[3:-1]
+#dirs = dirs[3:-1]
 
 # folder where I want to save my data
 output_dir1 = "/home/dev/Downloads/chirp_juha2b/Plots20"
@@ -112,7 +112,7 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
     if len(dB2) == 0:
         print('No useful data')     
         return
-        #sys.exit()
+
     am = n.max(dB2)
     apos = n.argwhere(dB2 > (am -3*ast))
     rg_3 = rg_2[apos]
@@ -146,11 +146,27 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
            
             DB3 = {}
             for freq in freqlist:
-            	DB3[freqs[freq]/1e6]  = n.column_stack((DataDict['DBall'][freqs[freq]/1e6], dBB[freqs[freq]/1e6]))            
+                #This try-except is tried as - very occassionally - the first option fails because of mismatch of dimensions of the variables being 
+                # sought to be column_stacked. In that case, for this particular file, a nan of the variable being concatenated (the second variable) is created to match 
+                # the equivalent dimension of the first variable. This might need little more work if this situation arises for the first file for a given day !   
+                try:
+                    DB3[freqs[freq]/1e6]  = n.column_stack((DataDict['DBall'][freqs[freq]/1e6], dBB[freqs[freq]/1e6]))
+                except:
+                    dtest = n.full(DataDict['DBall'][3].shape[0],None) 
+                    dtest[:] = n.NaN
+                    DB3[freqs[freq]/1e6]  = n.column_stack((DataDict['DBall'][freqs[freq]/1e6], dtest))
+           
             	
             T03  = n.hstack((DataDict['Time'], n.array([t0])))
-            range_gates3 = n.column_stack((DataDict['range_gates3'],range_gates))
-             
+            try:
+                #if jf == 534:
+                #    ipdb.set_trace()
+                range_gates3 = n.column_stack((DataDict['range_gates3'],range_gates))
+            except:
+                range_gatestest = n.full(DataDict['range_gates3'].shape[0], None)
+                range_gatestest[:] = n.NaN
+                range_gates3 = n.column_stack((DataDict['range_gates3'],range_gatestest))
+                              
         DataDict['DBall'] = DB3
         DataDict['Time'] = T03
         DataDict['range_gates3'] = range_gates3
@@ -161,7 +177,6 @@ def save_var(DataDict):
 
     path1 = output_dir1 + '/' + dirs1 + '/' + dirs1[5:10] + 'k.data'
     print(path1)
-    ipdb.set_trace()
     with open(path1, 'wb') as f:
         pickle.dump(DataDict, f)
 
@@ -171,7 +186,7 @@ if __name__ == "__main__":
         for j in range(0, len(dirs)):
             dirs1 = dirs[j]
             
-            dtt1 = datetime.datetime.strptime('2021-05-31','%Y-%m-%d').date()
+            dtt1 = datetime.datetime.strptime('2021-08-06','%Y-%m-%d').date()
             dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
 
             # Looking to process data after certain date:
