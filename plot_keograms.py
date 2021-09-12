@@ -49,7 +49,7 @@ freqlist = [60, 80, 100, 120, 160, 180]
 
 
 # folder where the lfm files exist
-rootdir = '/media/dev/Seagate Backup Plus Drive'
+rootdir = '/media/dev/Seagate Backup Plus Drive/chirp'
 
 # folder within which there were dated folders where the data were saved
 output_dir1 = "/home/dev/Downloads/chirp_juha2b/Plots20"
@@ -80,7 +80,7 @@ def save_var(DataDict):
   
     with open(path2, 'rb') as f:
         DataDict = pickle.load(f)
-    
+        
     # Check if there is change in schedule -- get the modulus, round it and take the differences of all values -- if any change, one or more of the differences will not be zero
     T03 = DataDict['Time']
     print(len(T03))
@@ -263,8 +263,9 @@ def save_var(DataDict):
             CT1 += 1
             for k in [j for j in DataDict['DBall'].keys()]:
                 DataDict['DBallnew'][k][:, i] = dB3test[:, i]
-
+            
             range_gatesnew[:, i] = range_gates2
+
     
     # Save 'essential' variables to a .txt file !
     FileName = os.path.join(path3,"Var.txt")
@@ -292,7 +293,7 @@ def save_var(DataDict):
         ax1 = fig.add_subplot(6, 1, j+1)
         for ja in range(0, 118):
             plt.pcolormesh(new_times[ja:ja+2], n.column_stack((range_gatesnew[:, ja], range_gatesnew[:, ja])),DataDict['DBallnew'][k].astype(n.float)[:-1, ja:ja+1], vmin=-3, vmax=30.0,cmap="inferno")
-        
+            
         cb = plt.colorbar()
         cb.set_label("SNR (dB)")
         plt.ylabel("%1.2f MHz\n Range (km)" %(k), weight='bold',fontsize=12)
@@ -313,10 +314,10 @@ if __name__ == "__main__":
 
         for j in range(0, len(dirs)):
             dirs1 = dirs[j]
-            dtt1 = datetime.datetime.strptime('2021-05-09','%Y-%m-%d').date()
+            dtt1 = datetime.datetime.strptime('2021-08-06','%Y-%m-%d').date()
             dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
 
-            if dirs1[0:10] == '2021-05-02':
+            if dirs1[0:10] == '2021-08-07':
             #dir1 = output_dir1 + '/' + dirs[j]
             #for x in os.listdir(dir1):
             #    if x.endswith("h.data"):

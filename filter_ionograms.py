@@ -97,6 +97,7 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
     r0 = range_gates[max_range_idx]
     
     DataDict["range_gates"] = range_gates
+    #ipdb.set_trace()
     
     dBB = {}
     for freq in freqlist:
@@ -128,8 +129,15 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
    
     if ((Rate == 100) and (400 < r0 < 1000)) |((Rate == 100) and (1000 < r0 < 1500) and (len(pos1) > 0)) :
         print('yes')
-        range_gates2 = range_gates
-        DataDict['range_gates2'] = range_gates
+        #ipdb.set_trace()
+        #if jf == 534:
+        #    ipdb.set_trace()   
+        #if range_gates.shape[0] == DataDict['range_gates2'].shape[0]:
+        #    range_gates2 = range_gates
+        #    DataDict['range_gates2'] = range_gates
+        #else:  
+        #    range_gates2 = DataDict['range_gates2']
+        #    DataDict['range_gates2'] = DataDict['range_gates2']
     
         ch1 += 1
         if ch1 == 1:
@@ -141,32 +149,36 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
             T01 = n.array([t0])
             T03 = T01
             range_gates3 = range_gates
+            DataDict['range_gates2'] = range_gates   
             
         else:
            
             DB3 = {}
             for freq in freqlist:
-                #This try-except is tried as - very occassionally - the first option fails because of mismatch of dimensions of the variables being 
-                # sought to be column_stacked. In that case, for this particular file, a nan of the variable being concatenated (the second variable) is created to match 
-                # the equivalent dimension of the first variable. This might need little more work if this situation arises for the first file for a given day !   
+                # This try-except is tried as - very occassionally - the first option fails because of mismatch of dimensions of the variables being 
+                # sought to be column_stacked. In that case, for this particular file, nans are padded to the the second variable to match 
+                # the equivalent dimension of the first variable. This might need little more work if this situation arises for the first file for a given day ! And it will also need  
+                # more work if the second variable is greater than the first variable [the reverse is assumed as this situation has occured only for one day so far I think] !  
                 try:
                     DB3[freqs[freq]/1e6]  = n.column_stack((DataDict['DBall'][freqs[freq]/1e6], dBB[freqs[freq]/1e6]))
                 except:
-                    dtest = n.full(DataDict['DBall'][3].shape[0],None) 
+                    dtest = n.full([DataDict['DBall'][freqs[freq]/1e6].shape[0] - dBB[3].shape[0]],None)
                     dtest[:] = n.NaN
+                    dtest = n.concatenate((dBB[freqs[freq]/1e6],dtest),axis=None)
                     DB3[freqs[freq]/1e6]  = n.column_stack((DataDict['DBall'][freqs[freq]/1e6], dtest))
            
             	
             T03  = n.hstack((DataDict['Time'], n.array([t0])))
             try:
-                #if jf == 534:
-                #    ipdb.set_trace()
                 range_gates3 = n.column_stack((DataDict['range_gates3'],range_gates))
+                DataDict['range_gates2'] = range_gates
             except:
-                range_gatestest = n.full(DataDict['range_gates3'].shape[0], None)
+                range_gatestest = n.full(DataDict['range_gates3'].shape[0] - range_gates.shape[0], None)
                 range_gatestest[:] = n.NaN
+                range_gatestest = n.concatenate((range_gates,range_gatestest),axis = None)
                 range_gates3 = n.column_stack((DataDict['range_gates3'],range_gatestest))
-                              
+                DataDict['range_gates2'] = range_gatestest
+                                                       
         DataDict['DBall'] = DB3
         DataDict['Time'] = T03
         DataDict['range_gates3'] = range_gates3
@@ -186,14 +198,14 @@ if __name__ == "__main__":
         for j in range(0, len(dirs)):
             dirs1 = dirs[j]
             
-            dtt1 = datetime.datetime.strptime('2021-08-06','%Y-%m-%d').date()
-            dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
+            #dtt1 = datetime.datetime.strptime('2021-08-06','%Y-%m-%d').date()
+            #dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
 
             # Looking to process data after certain date:
-            if dtt2 > dtt1 :
+            # if dtt2 > dtt1 :
             
             # Looking to process data for a certain day:
-            # if dirs1[0:10] == '2021-05-02':
+            if dirs1[0:10] == '2021-08-07':
             
             # Looking to process daata for all days for the year of choice : [e.g.: 2021]
             # if dirs1[0:4] == '2021':
