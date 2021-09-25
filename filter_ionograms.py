@@ -26,7 +26,8 @@ import ipdb
 
 
 # Folder which has lfm files. 
-rootdir = '/media/dev/Seagate Backup Plus Drive/chirp'
+rootdir = '/media/kc3pve/Seagate Backup Plus Drive/chirp'
+
 
 # All folders (within the rootdir) named by days of the calendar which has the lfm_files
 dirs = sorted(os.listdir(rootdir))
@@ -36,7 +37,7 @@ dirs = sorted(os.listdir(rootdir))
 #dirs = dirs[3:-1]
 
 # folder where I want to save my data
-output_dir1 = "/home/dev/Downloads/chirp_juha2b/Plots20"
+output_dir1 = "/home/kc3pve/Downloads/chirp_juha2b/Plots20"
 
 freqlist = [60, 80, 100, 120, 140, 160] 
 
@@ -189,6 +190,7 @@ def save_var(DataDict):
 
     path1 = output_dir1 + '/' + dirs1 + '/' + dirs1[5:10] + 'k.data'
     print(path1)
+    #ipdb.set_trace()
     with open(path1, 'wb') as f:
         pickle.dump(DataDict, f)
 

@@ -45,20 +45,21 @@ import math
 import cartopy.crs as ccrs
 import ipdb
 
+
 freqlist = [60, 80, 100, 120, 160, 180]
 
 
 # folder where the lfm files exist
-rootdir = '/media/dev/Seagate Backup Plus Drive/chirp'
+rootdir = '/media/kc3pve/Seagate Backup Plus Drive/chirp'
 
 # folder within which there were dated folders where the data were saved
-output_dir1 = "/home/dev/Downloads/chirp_juha2b/Plots20"
+output_dir1 = "/home/kc3pve/Downloads/chirp_juha2b/Plots20"
 
 # folder where I would want to save the RTI image
-output_dir2 = "/home/dev/Downloads/chirp_juha2b/Plots20/AllRTI"
+output_dir2 = "/home/kc3pve/Downloads/chirp_juha2b/Plots20/AllRTI"
 
 # folder where I would want to save the ionograms which have been selected and processed
-output_dir21 = "/home/dev/Downloads/chirp_juha2b/Plots23"
+output_dir21 = "/home/kc3pve/Downloads/chirp_juha2b/Plots23"
 
 # the dated folders where the data are saved
 dirs = sorted(os.listdir(output_dir1))
@@ -266,7 +267,7 @@ def save_var(DataDict):
             
             range_gatesnew[:, i] = range_gates2
 
-    
+    #ipdb.set_trace()
     # Save 'essential' variables to a .txt file !
     FileName = os.path.join(path3,"Var.txt")
     file = open(FileName, "w")
