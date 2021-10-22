@@ -14,7 +14,7 @@
 #4 (a). If T03a doesn't span the whole day, build it.
 #  (b). Then apply the corrections for schedule changes  -- if they still exist which they can --  in batches.
 #5. Fill the missing data with NaN in the intensity (dB3) and the range (range_gates3).
-           # Steps for 6 : 
+           # Steps for 5 : 
     		#a. Get the regular time-series  - A (T03a).
     		#b. Get the available time-series  - B (T03). Note len(A) > len(B)
     		#c. For every element in A, check if the closest corresponding element in B exists.
