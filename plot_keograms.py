@@ -267,7 +267,6 @@ def save_var(DataDict):
             
             range_gatesnew[:, i] = range_gates2
 
-    #ipdb.set_trace()
     # Save 'essential' variables to a .txt file !
     FileName = os.path.join(path3,"Var.txt")
     file = open(FileName, "w")

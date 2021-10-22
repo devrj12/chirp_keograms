@@ -98,7 +98,6 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
     r0 = range_gates[max_range_idx]
     
     DataDict["range_gates"] = range_gates
-    #ipdb.set_trace()
     
     dBB = {}
     for freq in freqlist:
@@ -130,9 +129,9 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
    
     if ((Rate == 100) and (400 < r0 < 1000)) |((Rate == 100) and (1000 < r0 < 1500) and (len(pos1) > 0)) :
         print('yes')
-        #ipdb.set_trace()
+
         #if jf == 534:
-        #    ipdb.set_trace()   
+
         #if range_gates.shape[0] == DataDict['range_gates2'].shape[0]:
         #    range_gates2 = range_gates
         #    DataDict['range_gates2'] = range_gates
@@ -190,7 +189,7 @@ def save_var(DataDict):
 
     path1 = output_dir1 + '/' + dirs1 + '/' + dirs1[5:10] + 'k.data'
     print(path1)
-    #ipdb.set_trace()
+    ipdb.set_trace()
     with open(path1, 'wb') as f:
         pickle.dump(DataDict, f)
 
