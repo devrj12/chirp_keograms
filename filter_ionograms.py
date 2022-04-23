@@ -208,7 +208,7 @@ if __name__ == "__main__":
             # Looking to process data for a certain day:
             if dirs1[0:10] == '2021-08-07':
             
-            # Looking to process daata for all days for the year of choice : [e.g.: 2021]
+            # Looking to process data for all days for the year of choice : [e.g.: 2021]
             # if dirs1[0:4] == '2021':
                 
                 # path goes into each-day-folder within the rootdir 
