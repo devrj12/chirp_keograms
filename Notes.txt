@@ -1,0 +1,43 @@
+  
+ # Notes about 'quantifying' the measure of the spread   
+ 
+    - new_times[0:59] -- first half of the day -- we should calculate the quantity [average/standard deviation of the intensity ?]
+    - range_gatesnew.shape = (3999, 120) 
+    - range_gatesnew[:,0].shape = (3999,)
+    - range_gatesnew[:,0][1940]  = 499.41423533963837
+    - range_gatesnew[:,0][2105]  = 1199.4900313097478
+
+
+    		- DataDict['DBallnew'].keys()                                               
+					dict_keys([3.0, 4.0, 5.0, 6.0, 7.0, 8.0])
+			
+    		- DataDict['DBallnew'][4].shape = (3999, 120)
+
+    		- DataDict['DBallnew'][4][:,0].shape = (3999,)
+    		
+    		- Run for loop through all times for this data :
+                  np.average(DataDict['DBallnew'][4][1940:2105,0]) 
+                  
+   
+   import numpy as np               
+   DA = []
+   DS = []               
+   for j in range(0,120):
+   		DA.append(np.average(DataDict['DBallnew'][4][1940:2105,j]))
+   		DS.append(np.std(DataDict['DBallnew'][4][1940:2105,j]))  
+   
+   import matplotlib.pyplot as plt	
+   	               
+   plt.plot(new_times,DA,'*b')               
+   plt.plot(new_times,DA,'b')
+   plt.ylabel('Average of Intensity (dB) between 500 and 1199 km')
+   plt.xlabel('Time (UTC)')
+   plt.title('Variation in Intensity')
+   
+   plt.plot(new_times,DS,'*b')               
+   plt.plot(new_times,DS,'b') 
+   plt.ylabel('Standard Deviation of Intensity (dB) between 500 and 1199 km')
+   plt.xlabel('Time (UTC)')
+   plt.title('Variation in Intensity')                                            
+  
+    

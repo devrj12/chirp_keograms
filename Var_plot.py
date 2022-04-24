@@ -270,17 +270,17 @@ def save_var(DataDict):
 
     # Save 'essential' variables to a .txt file !
     FileName = os.path.join(path3,"Var.txt")
-    file = open(FileName, "w")
-    file.write("%s = %s\n" %("Date", str(dirs1)))
-    file.write("%s = %s\n" %("CT", str(CT)))
-    file.write("%s = %s\n" %("CT1", str(CT1)))
-    file.write("%s = %s\n" %("T03_old", str(T03old)))
-    file.write("%s = %s\n" %("T03_new", str(len(T03))))
-    file.write("%s = %s\n" %("T03_old1", str(T03old1)))
-    file.write("%s = %s\n" %("T03_new1", str(T03)))
-    file.write("%s = %s\n" %("x3_old", str(x3old)))
-    file.write("%s = %s\n" %("x3_new", str(x3new)))
-    file.close()
+    #file = open(FileName, "w")
+    #file.write("%s = %s\n" %("Date", str(dirs1)))
+    #file.write("%s = %s\n" %("CT", str(CT)))
+    #file.write("%s = %s\n" %("CT1", str(CT1)))
+    #file.write("%s = %s\n" %("T03_old", str(T03old)))
+    #file.write("%s = %s\n" %("T03_new", str(len(T03))))
+    #file.write("%s = %s\n" %("T03_old1", str(T03old1)))
+    #file.write("%s = %s\n" %("T03_new1", str(T03)))
+    #file.write("%s = %s\n" %("x3_old", str(x3old)))
+    #file.write("%s = %s\n" %("x3_new", str(x3new)))
+    #file.close()
     
     # Make plots !
     fig = plt.figure(figsize=(1.5*6, 1.5*12))
@@ -306,8 +306,8 @@ def save_var(DataDict):
         #[left, bottom, right, top] in normalized (0, 1) figure coordinates
     
     plt.xlabel("Time (UTC)", weight='bold', fontsize=12)
-    plt.savefig(img_fname1, bbox_inches='tight')
-    plt.savefig(img_fname2, bbox_inches='tight')
+    #plt.savefig(img_fname1, bbox_inches='tight')
+    #plt.savefig(img_fname2, bbox_inches='tight')
     plt.close()
     plt.clf()
 

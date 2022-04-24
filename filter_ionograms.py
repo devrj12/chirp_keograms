@@ -80,7 +80,7 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
         S[S <= 0.0] = 1e-3
 
     max_range_idx = n.argmax(n.max(S, axis=0))
-    # axis 0 is the direction along the rows
+    # axis 0 is the direction along the rows but max_range_idx gives maximum index along ranges
         
     unarg = unravel_index(S.argmax(),S.shape)
     
@@ -96,12 +96,15 @@ def filter_ionograms(f, Datadict, normalize_by_frequency=True):
     dr = dt*c.c/1e3    
     range_gates = dr+2*ranges/1e3
     r0 = range_gates[max_range_idx]
+    # r0 is range at which the SNR maximum occurs along the range_gates
     
     DataDict["range_gates"] = range_gates
     
     dBB = {}
     for freq in freqlist:
         dBB[freqs[freq]/1e6] = dB[:, freq]
+        
+    #ipdb.set_trace()
     
     #  I am trying to find positions in dB where positive dB values [for the frequency for which the maximum in dB has occurred] 
     #  are greater than a threshold [the threshold being : am - 3*ast]
@@ -189,7 +192,7 @@ def save_var(DataDict):
 
     path1 = output_dir1 + '/' + dirs1 + '/' + dirs1[5:10] + 'k.data'
     print(path1)
-    ipdb.set_trace()
+    #ipdb.set_trace()
     with open(path1, 'wb') as f:
         pickle.dump(DataDict, f)
 
@@ -199,14 +202,14 @@ if __name__ == "__main__":
         for j in range(0, len(dirs)):
             dirs1 = dirs[j]
             
-            #dtt1 = datetime.datetime.strptime('2021-08-06','%Y-%m-%d').date()
-            #dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
+            dtt1 = datetime.datetime.strptime('2021-09-09','%Y-%m-%d').date()
+            dtt2 = datetime.datetime.strptime(dirs1[0:10],'%Y-%m-%d').date()
 
             # Looking to process data after certain date:
-            # if dtt2 > dtt1 :
+            if dtt2 > dtt1 :
             
             # Looking to process data for a certain day:
-            if dirs1[0:10] == '2021-08-07':
+            #if dirs1[0:10] == '2021-08-07':
             
             # Looking to process daata for all days for the year of choice : [e.g.: 2021]
             # if dirs1[0:4] == '2021':
